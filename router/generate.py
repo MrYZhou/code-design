@@ -1,13 +1,10 @@
 import os
 
-from fastapi import APIRouter, Body, HTTPException
+from fastapi import APIRouter, Body
 from fastapi.responses import FileResponse
-from nanoid import generate
-from sqlmodel import Session, select
 
-from server.connect.dao import getTable, dyConnect
 from server.generate.dao import Config
-from server.generate.index import configGen, configParse,codeParse
+from server.generate.index import codeParse
 from util.base import Common
 
 router = APIRouter(
@@ -15,26 +12,6 @@ router = APIRouter(
     tags=["代码生成"],
     responses={404: {"description": "Not found"}},
 )
-
-
-# 直接生成一个预览代码,返回一个缓存的key
-
-
-@router.post("/")
-async def index(data: Config):
-    if not data.cacheKey:
-        data.cacheKey = Common.randomkey()
-
-    res = configParse(data.cacheKey, data)
-
-    return {"cacheKey": data.cacheKey, "res": res}
-
-@router.post("/codeParse")
-async def index(config: dict = Body(None)):
-    # 获取表的字段信息
-    # list = getTable(dyConnect(config), config.get('name'), config.get('table'))
-    return codeParse([],config)
-
 
 # 通过缓存下载
 @router.post("/download")
@@ -49,68 +26,11 @@ async def index(data: Config = Config()):
     url = os.path.join(os.getcwd(), "static", name + ".zip")
     return FileResponse(url, filename=name + ".zip", status_code=200)
 
-
-# 获取数据库的列表
-@router.get("/list", status_code=200)
-async def index():
-    with Session(engine) as session:
-        list = session.exec(select(Config).offset(0).limit(100)).all()
-        return list
-
-
-# 保存生成的配置
-@router.post("/saveConfig")
-async def index(data: Config):
-    with Session(engine) as session:
-        data.id = generate()
-        session.add(data)
-        session.commit()
-        session.refresh(data)
-        return data
-
-
-# 获取生成的配置根据id
-@router.get("/config/{id}")
-async def index(id):
-    with Session(engine) as session:
-        data = session.get(Config, id)
-        if not data:
-            raise HTTPException(status_code=404, detail="data not found")
-        return data
-
-
-# 删除生成的配置根据id
-@router.delete("/config/{id}")
-async def index(id):
-    with Session(engine) as session:
-        data = session.get(Config, id)
-        if not data:
-            raise HTTPException(status_code=404, detail="data not found")
-        session.delete(data)
-        session.commit()
-        return {"ok": True}
-
-
-# v2
-# 下载对应单表的代码
-@router.post("/code")
-async def index(dataBase: dict = Body(None)):
+@router.post("/codeParse")
+async def index(config: dict = Body(None)):
     # 获取表的字段信息
-    list = getTable(dyConnect(dataBase), dataBase.get('name'), dataBase.get('table'))
-    fieldPrefix = dataBase["prefix"]["field"]
-    dataList =[]
-    for item in list:
-        columnBase = item[1]
-        column = item[1].replace(fieldPrefix,'')
-        columnName = column[:1].lower()+column[1:]
-        dataList.append({
-            **item,**{"columnName":columnName,"columnBase":columnBase}
-        })
-        
-    # 模块解析
-    path = await configGen(dataList,dataBase)
-    url = f"./static/{path}.zip"
-    return FileResponse(url, filename=f"{url}.zip")
+    # list = getTable(dyConnect(config), config.get('name'), config.get('table'))
+    return codeParse([],config)
 
 
 @router.get("/zipfile")
