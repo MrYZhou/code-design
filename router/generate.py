@@ -13,18 +13,6 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-# 通过缓存下载
-@router.post("/download")
-async def index(data: Config = Config()):
-    # 解析模板
-    if not data.cacheKey:
-        data.cacheKey = Common.randomkey()
-        configParse(data.cacheKey, data)
-
-    # 压缩模板
-    name = "模板" + data.cacheKey
-    url = os.path.join(os.getcwd(), "static", name + ".zip")
-    return FileResponse(url, filename=name + ".zip", status_code=200)
 
 @router.post("/codeParse")
 async def index(config: dict = Body(None)):
