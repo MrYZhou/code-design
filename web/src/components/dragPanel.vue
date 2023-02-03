@@ -65,6 +65,7 @@ const doView = async () => {
 };
 
 const parse =async ()=>{
+  console.log(111,data.value1);
   if(data.value1.length==0) return 
   let info  = {content:data.value1,...store.config,configData:store.renderData}
   let res = await axios.post('http://localhost:8000/generate/codeParse',info)

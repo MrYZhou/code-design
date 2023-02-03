@@ -131,3 +131,4 @@ static/*-*
 web/node_modules
 web/.eslintrc-auto-import.json
 web/src/auto-imports.d.ts
+web/src/components.d.ts

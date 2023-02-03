@@ -7,6 +7,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    copy: typeof import('./components/leftCom/indexOtions.vue')['default']
     DragPanel: typeof import('./components/dragPanel.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCol: typeof import('element-plus/es')['ElCol']
@@ -27,6 +28,8 @@ declare module '@vue/runtime-core' {
     ElTag: typeof import('element-plus/es')['ElTag']
     Footer: typeof import('./components/footer.vue')['default']
     Header: typeof import('./components/header.vue')['default']
+    IndexComposition: typeof import('./components/leftCom/indexComposition.vue')['default']
+    IndexOtions: typeof import('./components/leftCom/indexOtions.vue')['default']
     Json: typeof import('./components/json/index.vue')['default']
     JsonDrawer: typeof import('./components/jsonDrawer.vue')['default']
     LeftCom: typeof import('./components/leftCom/index.vue')['default']

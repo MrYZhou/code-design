@@ -30,14 +30,9 @@ onMounted(() => {
   // 监听值变化
   monacoEditor.onDidChangeModelContent(() => {
     const currenValue = monacoEditor?.getValue();
+    emit('update:value', currenValue);
     emit("valueRefresh", currenValue);
   });
-  watchEffect(() => {
-    if (props.value !== monacoEditor?.getValue()) {
-        monacoEditor.setValue(value);
-        emit("valueRefresh", currenValue);
-    }
-    });
 });
 
 </script>
