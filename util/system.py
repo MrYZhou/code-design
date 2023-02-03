@@ -1,10 +1,10 @@
 import importlib
 import os
 
-from fastapi import APIRouter, FastAPI
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from sqlmodel import SQLModel, create_engine
+from sqlmodel import SQLModel
 
 from util.base import routeList
 
@@ -47,8 +47,6 @@ def initHttp(app: FastAPI):
         allow_headers=["*"],
     )
 
-def initDataBase():
-    SQLModel.metadata.create_all(engine)
 def initStaticDir(app):
     app.mount("/static", StaticFiles(directory="static"), name="static")  
 class Init:
