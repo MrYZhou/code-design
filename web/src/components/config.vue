@@ -22,11 +22,18 @@
             <el-radio-group v-model="config.parseType" class="ml-4">
               <el-radio label="1" size="large">默认</el-radio>
               <el-radio label="2" size="large">目录</el-radio>
-              <el-radio label="3" size="large">方案</el-radio>
+              <!-- <el-radio label="3" size="large">方案</el-radio> -->
             </el-radio-group>
           </el-form-item>
           <el-form-item label="服务地址">
             <el-input v-model="config.api" placeholder="请输入"></el-input>
+          </el-form-item>
+          <el-form-item label="定时请求">
+            <el-switch v-model="config.timeOpen" active-text="开" inactive-text="关" />
+          </el-form-item>
+         
+          <el-form-item label="间隔" v-if="config.timeOpen">
+            <el-input-number style="width:100%" :step="1" :min="1" v-model="config.time" placeholder="请输入秒数"></el-input-number>
           </el-form-item>
         </el-form>
 
@@ -85,6 +92,8 @@ const direction = ref("rtl");
 let config = reactive({ 
   api:"http://localhost:8000",
   parseType:"1",
+  time:1,
+  timeOpen:false,
   vueType: "1", codeForm: "1", output: "" });
 let datbaseInfo = reactive({
   host: "127.0.0.1",
@@ -96,6 +105,7 @@ let datbaseInfo = reactive({
     "table": "la_", "field": "f_" 
   }
 });
+const emit = defineEmits(['startTimeDo'])
 function cancelClick() {
   drawer.value = false;
 }
@@ -105,6 +115,7 @@ function showPanel() {
 function confirmClick() {
    // 存在store
    store.saveConfig({...config,...datbaseInfo})
+   emit('startTimeDo')
    drawer.value = false;
 }
 </script>

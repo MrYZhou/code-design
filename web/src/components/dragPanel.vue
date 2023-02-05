@@ -1,6 +1,6 @@
 <template>
   <!-- 抽屉面板 -->
-  <leftConfig ref="leftconfig"></leftConfig>
+  <config ref="configPanel" @startTimeDo="startTimeDo"></config>
   <jsonDrawer ref="jsondrawer" @valueRefresh="parse"></jsonDrawer>
   <!-- 主布局 -->
   
@@ -28,18 +28,33 @@ import { ElMessageBox } from "element-plus";
 
 const store = useMainStore();
 let data = reactive({value2:'',value1:''})
+let timer = ref('')
+const startTimeDo = ()=>{
+  let config = store.config
+  clearInterval(timer)
+  if(config.timeOpen){
+    timer = setInterval(()=>{
+      parse()
+    },1000 * config.time)
+  }
+}
+watchEffect(() => {
+})
 onMounted(() => {
-
-  // setInterval(()=>{
-  //   parse()
-  // },1000 * 2)
+  let config = store.config 
+  if(config.time){
+    timer = setInterval(()=>{
+      parse()
+    },1000 * config.time)
+  }
+  
 });
 const axios = inject('axios')  // inject axios
 
 // 显示控制面板
-const leftconfig = ref();
+const configPanel = ref();
 const doConfig = () => {
-  leftconfig.value.drawer = true;
+  configPanel.value.drawer = true;
 };
 
 // 数据填充,这里很坑啊,ref必须先获取才能调
@@ -65,7 +80,6 @@ const doView = async () => {
 };
 
 const parse =async ()=>{
-  console.log(111,data.value1);
   if(data.value1.length==0) return 
   let info  = {content:data.value1,...store.config,configData:store.renderData}
   let res = await axios.post('http://localhost:8000/generate/codeParse',info)
