@@ -58,32 +58,39 @@
         </el-row>
 
         <div class="mt10">
-          <el-form :model="datbaseInfo" label-width="100px" :label-position="'left'">
+          <el-form
+            :model="config.datbaseInfo"
+            label-width="100px"
+            :label-position="'left'"
+          >
             <el-form-item label="连接地址">
-              <el-input v-model="datbaseInfo.host" placeholder="请输入"></el-input>
+              <el-input v-model="config.datbaseInfo.host" placeholder="请输入"></el-input>
             </el-form-item>
             <el-form-item label="连接端口">
-              <el-input v-model="datbaseInfo.port" placeholder="请输入"></el-input>
+              <el-input v-model="config.datbaseInfo.port" placeholder="请输入"></el-input>
             </el-form-item>
 
             <el-form-item label="用户名">
-              <el-input v-model="datbaseInfo.user" placeholder="请输入"></el-input>
+              <el-input v-model="config.datbaseInfo.user" placeholder="请输入"></el-input>
             </el-form-item>
 
             <el-form-item label="密码">
-              <el-input v-model="datbaseInfo.password" placeholder="请输入"></el-input>
+              <el-input
+                v-model="config.datbaseInfo.password"
+                placeholder="请输入"
+              ></el-input>
             </el-form-item>
 
             <el-form-item label="过滤表前缀">
               <el-input
-                v-model="datbaseInfo.prefix.table"
+                v-model="config.datbaseInfo.prefix.table"
                 placeholder="请输入"
               ></el-input>
             </el-form-item>
 
             <el-form-item label="过滤字段前缀">
               <el-input
-                v-model="datbaseInfo.prefix.field"
+                v-model="config.datbaseInfo.prefix.field"
                 placeholder="请输入"
               ></el-input>
             </el-form-item>
@@ -122,29 +129,37 @@ let config = reactive({
   vueType: "1",
   codeForm: "1",
   output: "",
-});
-let datbaseInfo = reactive({
-  host: "127.0.0.1",
-  name: "study", // 数据库
-  port: "3306",
-  user: "root",
-  password: "123456",
-  prefix: {
-    table: "la_",
-    field: "f_",
+  datbaseInfo: {
+    host: "127.0.0.1",
+    name: "study", // 数据库
+    port: "3306",
+    user: "root",
+    password: "123456",
+    prefix: {
+      table: "la_",
+      field: "f_",
+    },
   },
 });
-const emit = defineEmits(["startTimeDo"]);
+const loadConfig = () => {
+  let configData = localStorage.getItem("design-config");
+  if (configData) {
+    config = reactive({ ...JSON.parse(configData) });
+  }
+};
+onMounted(() => {
+  loadConfig();
+});
+const emit = defineEmits(["startDo"]);
 function cancelClick() {
   drawer.value = false;
 }
-function showPanel() {
-  drawer.value = true;
-}
 function confirmClick() {
-  // 存在store
-  store.saveConfig({ ...config, ...datbaseInfo });
+  // 存pinia
+  store.saveConfig(config);
+  // 存localStorage
+  localStorage.setItem("design-config", JSON.stringify(config));
   emit("startDo");
-  drawer.value = false;
+  cancelClick();
 }
 </script>

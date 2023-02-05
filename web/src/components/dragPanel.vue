@@ -83,10 +83,7 @@ const initListener = () => {
     data.value2 = event.data.msg;
   });
 };
-const loadConfig = () => {
-  // todo 解析localdata
-  
-};
+
 // 显示控制面板
 const configPanel = ref();
 let isPreview = ref(false);
@@ -95,8 +92,6 @@ onMounted(() => {
   startDo();
 
   initListener();
-
-  loadConfig();
 
   if (window.name === "preview") {
     isPreview = true;
