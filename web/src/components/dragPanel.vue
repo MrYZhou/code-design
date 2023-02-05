@@ -85,6 +85,7 @@ const initListener = () => {
 };
 const loadConfig = () => {
   // todo 解析localdata
+  
 };
 // 显示控制面板
 const configPanel = ref();

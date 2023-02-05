@@ -5,12 +5,9 @@
     </template>
     <template #default>
       <div>
-        <el-input
-          v-model="textarea1"
-          type="textarea"
-          placeholder=""
-        />
-        <!-- <json-viewer v-model:value="parseValue" copyable sort></json-viewer> -->
+        <el-row>
+          <json  v-model="textarea1" style="width:100%;height:100vh"></json>
+        </el-row>
       </div>
     </template>
     <template #footer>
@@ -50,5 +47,10 @@ function confirmClick() {
   }
   .el-drawer__header{
     margin-bottom: 0;
+  }
+  .el-drawer__body{
+    overflow: hidden;
+    /* width: 0; */
+    padding-right: 0;
   }
 </style>
