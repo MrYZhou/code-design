@@ -18,11 +18,12 @@
               <el-radio label="2" size="large">web</el-radio>
             </el-radio-group>
           </el-form-item> -->
-          <el-form-item label="解析类型">
+          <el-form-item label="解析模式">
             <el-radio-group v-model="config.parseType" class="ml-4">
               <el-radio label="1" size="large">默认</el-radio>
               <!-- <el-radio label="2" size="large">目录</el-radio> -->
               <!-- <el-radio label="3" size="large">方案</el-radio> -->
+              <el-radio label="4" size="large">只预览</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="目录路径" v-if="config.parseType === '2'">

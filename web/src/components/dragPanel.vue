@@ -7,20 +7,23 @@
     <div
       class="group group-show"
       :style="splitState ? 'width: 100%;' : 'width: 48%;'"
-      v-if="!isPreview"
+      v-if="!isPreview && store.config.parseType != 4"
     >
       <leftCom ref="leftcom" v-model:value="data.value1" @valueRefresh="parse"></leftCom>
     </div>
     <div class="btn-group" v-if="!isPreview">
       <div><el-button @click="doConfig" :icon="Tools"></el-button></div>
-      <div><el-button @click="doParse" :icon="View"></el-button></div>
-      <!-- <div><el-button @click="doDownload" :icon="Download"></el-button></div> -->
-      <div><el-button @click="previewPanel" :icon="DocumentCopy"></el-button></div>
+      <template v-if="store.config.parseType != 4">
+        <div><el-button @click="doParse" :icon="View"></el-button></div>
+        <!-- <div><el-button @click="doDownload" :icon="Download"></el-button></div> -->
+        <div><el-button @click="previewPanel" :icon="DocumentCopy"></el-button></div>
+      </template>
+
       <div><el-button @click="jsonData" :icon="Dish"></el-button></div>
     </div>
     <div
       class="group group-form"
-      :style="splitState ? 'width: 100%;' : 'width: 48%;'"
+      :style="splitState || store.config.parseType == 4 ? 'width: 100%;' : 'width: 48%;'"
       v-if="!splitState || isPreview"
     >
       <rightCom ref="rightcom" v-model:value="data.value2"></rightCom>
@@ -53,8 +56,8 @@ const startDo = () => {
       parse();
     }, 1000 * config.time);
   }
-  if(config.splitPanel){
-    previewPanel()
+  if (config.splitPanel) {
+    previewPanel();
   }
 };
 
@@ -63,7 +66,7 @@ let subWindow = ref(null);
 let rightcom = ref();
 let leftcom = ref();
 const previewPanel = () => {
-  subWindow = window.open(window, "preview",{target:'_blank'});
+  subWindow = window.open(window, "preview", { target: "_blank" });
   splitState.value = true;
   rightcom.value.show = false;
 };
@@ -81,7 +84,7 @@ const initListener = () => {
   });
 };
 const loadConfig = () => {
-   // todo 解析localdata
+  // todo 解析localdata
 };
 // 显示控制面板
 const configPanel = ref();
@@ -92,8 +95,7 @@ onMounted(() => {
 
   initListener();
 
- 
-  loadConfig()
+  loadConfig();
 
   if (window.name === "preview") {
     isPreview = true;
