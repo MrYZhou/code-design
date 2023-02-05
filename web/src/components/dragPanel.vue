@@ -3,7 +3,7 @@
   <config ref="configPanel" @startTimeDo="startTimeDo"></config>
   <jsonDrawer ref="jsondrawer" @valueRefresh="parse"></jsonDrawer>
   <!-- 主布局 -->
-  
+
   <div class="larry">
     <div class="group group-show">
       <leftCom v-model:value="data.value1" @valueRefresh="parse"></leftCom>
@@ -19,37 +19,35 @@
     </div>
   </div>
 </template>
-<script  setup>
+<script setup>
 import rightCom from "./rightCom/index.vue";
 import leftCom from "./leftCom/index.vue";
-import { View, Tools, Download,Document } from "@element-plus/icons-vue";
+import { View, Tools, Download, Document } from "@element-plus/icons-vue";
 import { useMainStore } from "@/store";
 import { ElMessageBox } from "element-plus";
 
 const store = useMainStore();
-let data = reactive({value2:'',value1:''})
-let timer = ref('')
-const startTimeDo = ()=>{
-  let config = store.config
-  clearInterval(timer)
-  if(config.timeOpen){
-    timer = setInterval(()=>{
-      parse()
-    },1000 * config.time)
+let data = reactive({ value2: "", value1: "" });
+let timer = ref("");
+
+const startTimeDo = () => {
+  let config = store.config;
+  clearInterval(timer);
+  if (config.timeOpen) {
+    timer = setInterval(() => {
+      parse();
+    }, 1000 * config.time);
   }
-}
-watchEffect(() => {
-})
+};
+watchEffect(() => {});
 onMounted(() => {
-  let config = store.config 
-  if(config.time){
-    timer = setInterval(()=>{
-      parse()
-    },1000 * config.time)
+  if (store.config.time) {
+    timer = setInterval(() => {
+      parse();
+    }, 1000 * config.time);
   }
-  
 });
-const axios = inject('axios')  // inject axios
+const axios = inject("axios"); // inject axios
 
 // 显示控制面板
 const configPanel = ref();
@@ -64,35 +62,40 @@ const jsonData = () => {
 };
 
 const valueChange1 = (data) => {
-  data.value1=data
+  data.value1 = data;
 };
 //预览
 const doView = async () => {
-  if(data.value1.length==0){
+  if (data.value1.length == 0) {
     ElMessage({
-      message: '没有要解析的字符',
-      type: 'warning',
-    })
-    return
+      message: "没有要解析的字符",
+      type: "warning",
+    });
+    return;
   }
-  parse()
+  parse();
+};
+
+const parse = async () => {
+  if (data.value1.length == 0) return;
+  let info = { content: data.value1, ...store.config, configData: store.renderData };
+  let res = await axios.post("http://localhost:8000/generate/codeParse", info);
+  
+  let config = store.config;
+  if (config.datakey) {
+    let keyList = config.datakey.split(".");
+    keyList.forEach((key) => {
+      if (res.data.hasOwnProperty(key)) {
+        res.data = res.data[key];
+      }
+    });
+  }
+  if(typeof value === 'string') data.value2 = res.data;
   
 };
 
-const parse =async ()=>{
-  if(data.value1.length==0) return 
-  let info  = {content:data.value1,...store.config,configData:store.renderData}
-  let res = await axios.post('http://localhost:8000/generate/codeParse',info)
-  data.value2 = res.data
-}
-
-
 // 下载
-const doDownload = () => {
-};
-
-
-
+const doDownload = () => {};
 </script>
 <style type="scss">
 .larry {
@@ -109,11 +112,11 @@ const doDownload = () => {
 .wrap-form {
   display: inline-block;
 }
-.btn-group{
-  margin:0 5px;
+.btn-group {
+  margin: 0 5px;
   padding: 2px;
 }
-.btn-group div{
+.btn-group div {
   margin-bottom: 5px;
 }
 .group {
@@ -126,7 +129,6 @@ const doDownload = () => {
 }
 
 .group-form {
-  
 }
 .group-form::-webkit-scrollbar {
   display: none;

@@ -28,6 +28,10 @@
           <el-form-item label="服务地址">
             <el-input v-model="config.api" placeholder="请输入"></el-input>
           </el-form-item>
+          <el-form-item label="数据映射">
+            <el-input v-model="config.datakey" placeholder="请输入"></el-input>
+          </el-form-item>
+          
           <el-form-item label="定时请求">
             <el-switch v-model="config.timeOpen" active-text="开" inactive-text="关" />
           </el-form-item>
@@ -93,6 +97,7 @@ let config = reactive({
   api:"http://localhost:8000",
   parseType:"1",
   time:1,
+  datakey:'',
   timeOpen:false,
   vueType: "1", codeForm: "1", output: "" });
 let datbaseInfo = reactive({

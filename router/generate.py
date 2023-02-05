@@ -18,7 +18,7 @@ router = APIRouter(
 async def index(config: dict = Body(None)):
     # 获取表的字段信息
     # list = getTable(dyConnect(config), config.get('name'), config.get('table'))
-    return codeParse([],config)
+    return {'content':codeParse([],config)}
 
 
 @router.get("/zipfile")
