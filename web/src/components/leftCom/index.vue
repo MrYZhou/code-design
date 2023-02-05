@@ -1,5 +1,5 @@
 <template>
-  <div ref="editContainer" class="code-editor"></div>
+  <div ref="editContainer" class="code-editor" v-if="show"></div>
 </template>
 <script setup>
 import { getCurrentInstance, onMounted, watch } from "vue";
@@ -16,30 +16,42 @@ self.MonacoEnvironment = {
 let props = defineProps({
   value: "",
 });
-
-const emit = defineEmits(["valueRefresh"]);
+let show = ref(true);
+const emit = defineEmits(["valueRefresh", "update:value"]);
 onMounted(() => {
   monacoEditor = monaco.editor.create(proxy.$refs.editContainer, {
-    value: props.value,
-    readOnly: false,
-    language: "java",
-    theme: "vs",
+    value: props.value, // 内容
+    readOnly: false, // 是否只读
+    language: "java", // 显示的语言
+    foldingStrategy: "indentation", // 代码可分小段折叠
+    automaticLayout: true, // 自适应布局
+    theme: "vs", // 白色主题
+    overviewRulerBorder: false, // 不要滚动条的边框
+    autoClosingBrackets: true,
     selectOnLineNumbers: true,
     renderSideBySide: false,
+    minimap: {
+      enabled: true, // 导航地图
+    },
   });
   // 监听值变化
   monacoEditor.onDidChangeModelContent(() => {
     const currenValue = monacoEditor?.getValue();
-    emit('update:value', currenValue);
+    emit("update:value", currenValue);
     emit("valueRefresh", currenValue);
   });
 });
-
+const hide = () => {
+  show.value = false;
+};
+// 暴露方法给其他组件
+defineExpose({
+  hide,
+});
 </script>
-<style scoped>
+<style scoped type="scss">
 .code-editor {
   width: 100%;
   height: 100%;
-  bottom: 1px solid red;
 }
 </style>

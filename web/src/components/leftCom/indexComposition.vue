@@ -41,7 +41,6 @@ export default {
           // 监听值变化
           monacoEditor.onDidChangeModelContent(() => {
               const currenValue = monacoEditor?.getValue();
-              console.log(currenValue);
               emit('update:value', currenValue);
               emit("valueRefresh", currenValue);
           });

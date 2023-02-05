@@ -3,26 +3,42 @@
   <config ref="configPanel" @startTimeDo="startTimeDo"></config>
   <jsonDrawer ref="jsondrawer" @valueRefresh="parse"></jsonDrawer>
   <!-- 主布局 -->
-
   <div class="larry">
-    <div class="group group-show">
-      <leftCom v-model:value="data.value1" @valueRefresh="parse"></leftCom>
+    <div
+      class="group group-show"
+      :style="splitState ? 'width: 100%;' : 'width: 48%;'"
+      v-if="!isPreview"
+    >
+      <leftCom ref="leftcom" v-model:value="data.value1" @valueRefresh="parse"></leftCom>
     </div>
-    <div class="btn-group">
+    <div class="btn-group" v-if="!isPreview">
       <div><el-button @click="doConfig" :icon="Tools"></el-button></div>
-      <div><el-button @click="doView" :icon="View"></el-button></div>
-      <div><el-button @click="doDownload" :icon="Download"></el-button></div>
-      <div><el-button @click="jsonData" :icon="Document"></el-button></div>
+      <div><el-button @click="doParse" :icon="View"></el-button></div>
+      <!-- <div><el-button @click="doDownload" :icon="Download"></el-button></div> -->
+      <div><el-button @click="previewPanel" :icon="DocumentCopy"></el-button></div>
+      <div><el-button @click="jsonData" :icon="Dish"></el-button></div>
+      <el-button @click="postm2">11</el-button>
     </div>
-    <div class="group group-form">
-      <rightCom v-model:value="data.value2"></rightCom>
+    <div
+      class="group group-form"
+      :style="splitState ? 'width: 100%;' : 'width: 48%;'"
+      v-if="!splitState || isPreview"
+    >
+      <rightCom ref="rightcom" v-model:value="data.value2"></rightCom>
     </div>
   </div>
 </template>
 <script setup>
 import rightCom from "./rightCom/index.vue";
 import leftCom from "./leftCom/index.vue";
-import { View, Tools, Download, Document } from "@element-plus/icons-vue";
+import {
+  View,
+  Tools,
+  Download,
+  Document,
+  DocumentCopy,
+  Dish,
+} from "@element-plus/icons-vue";
 import { useMainStore } from "@/store";
 import { ElMessageBox } from "element-plus";
 
@@ -39,18 +55,51 @@ const startTimeDo = () => {
     }, 1000 * config.time);
   }
 };
+
+let splitState = ref(false);
+let subWindow = ref(null);
+let rightcom = ref();
+let leftcom = ref();
+const previewPanel = () => {
+  subWindow = window.open(window, "preview");
+  splitState.value = true;
+  rightcom.value.show = false;
+};
+
+const postm2 = () => {
+  postMessage(123);
+};
+
+const postMessage = (msg) => {
+  subWindow.postMessage({ type: "preview", msg }, "/");
+};
+
+const initListener = () => {
+  window.addEventListener("message", function (event) {
+    if (event.data?.type != "preview") {
+      return;
+    }
+    data.value2 = event.data.msg;
+  });
+};
+// 显示控制面板
+const configPanel = ref();
+let isPreview = ref(false);
 watchEffect(() => {});
 onMounted(() => {
-  if (store.config.time) {
-    timer = setInterval(() => {
-      parse();
-    }, 1000 * config.time);
+  startTimeDo();
+
+  initListener();
+
+  // todo 解析localdata
+  if (window.name === "preview") {
+    isPreview = true;
+    splitState.value = true;
+    leftcom.value.hide();
   }
 });
 const axios = inject("axios"); // inject axios
 
-// 显示控制面板
-const configPanel = ref();
 const doConfig = () => {
   configPanel.value.drawer = true;
 };
@@ -64,8 +113,8 @@ const jsonData = () => {
 const valueChange1 = (data) => {
   data.value1 = data;
 };
-//预览
-const doView = async () => {
+
+const doParse = async () => {
   if (data.value1.length == 0) {
     ElMessage({
       message: "没有要解析的字符",
@@ -77,11 +126,11 @@ const doView = async () => {
 };
 
 const parse = async () => {
+  let config = store.config;
   if (data.value1.length == 0) return;
   let info = { content: data.value1, ...store.config, configData: store.renderData };
-  let res = await axios.post("http://localhost:8000/generate/codeParse", info);
-  
-  let config = store.config;
+  let res = await axios.post(`http://127.0.0.1:8000/generate/codeParse`, info);
+
   if (config.datakey) {
     let keyList = config.datakey.split(".");
     keyList.forEach((key) => {
@@ -90,8 +139,13 @@ const parse = async () => {
       }
     });
   }
-  if(typeof value === 'string') data.value2 = res.data;
-  
+  let value = res.data;
+  if (typeof value === "string") {
+    data.value2 = value;
+    if (splitState) {
+      postMessage(value);
+    }
+  }
 };
 
 // 下载
@@ -122,7 +176,6 @@ const doDownload = () => {};
 .group {
   border: 1px solid #51c4d3;
   padding: 12px 0px;
-  width: 48%;
   background-color: #fff;
   /* overflow-y: scroll; */
   overflow-y: hidden;
