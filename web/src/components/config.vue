@@ -21,9 +21,12 @@
           <el-form-item label="解析类型">
             <el-radio-group v-model="config.parseType" class="ml-4">
               <el-radio label="1" size="large">默认</el-radio>
-              <el-radio label="2" size="large">目录</el-radio>
+              <!-- <el-radio label="2" size="large">目录</el-radio> -->
               <!-- <el-radio label="3" size="large">方案</el-radio> -->
             </el-radio-group>
+          </el-form-item>
+          <el-form-item label="目录路径" v-if="config.parseType === '2'">
+            <el-input v-model="config.templateDir" placeholder="请输入"></el-input>
           </el-form-item>
           <el-form-item label="服务地址">
             <el-input v-model="config.api" placeholder="请输入"></el-input>
@@ -111,6 +114,7 @@ let config = reactive({
   parseType: "1",
   time: 1,
   datakey: "",
+  templateDir: "",
   splitPanel: false,
   hasOne: false,
   timeOpen: false,
@@ -139,7 +143,7 @@ function showPanel() {
 function confirmClick() {
   // 存在store
   store.saveConfig({ ...config, ...datbaseInfo });
-  emit("startTimeDo");
+  emit("startDo");
   drawer.value = false;
 }
 </script>

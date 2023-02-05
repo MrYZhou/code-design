@@ -1,6 +1,6 @@
 <template>
   <!-- 抽屉面板 -->
-  <config ref="configPanel" @startTimeDo="startTimeDo"></config>
+  <config ref="configPanel" @startDo="startDo"></config>
   <jsonDrawer ref="jsondrawer" @valueRefresh="parse"></jsonDrawer>
   <!-- 主布局 -->
   <div class="larry">
@@ -17,7 +17,6 @@
       <!-- <div><el-button @click="doDownload" :icon="Download"></el-button></div> -->
       <div><el-button @click="previewPanel" :icon="DocumentCopy"></el-button></div>
       <div><el-button @click="jsonData" :icon="Dish"></el-button></div>
-      <el-button @click="postm2">11</el-button>
     </div>
     <div
       class="group group-form"
@@ -46,13 +45,16 @@ const store = useMainStore();
 let data = reactive({ value2: "", value1: "" });
 let timer = ref("");
 
-const startTimeDo = () => {
+const startDo = () => {
   let config = store.config;
   clearInterval(timer);
   if (config.timeOpen) {
     timer = setInterval(() => {
       parse();
     }, 1000 * config.time);
+  }
+  if(config.splitPanel){
+    previewPanel()
   }
 };
 
@@ -61,13 +63,9 @@ let subWindow = ref(null);
 let rightcom = ref();
 let leftcom = ref();
 const previewPanel = () => {
-  subWindow = window.open(window, "preview");
+  subWindow = window.open(window, "preview",{target:'_blank'});
   splitState.value = true;
   rightcom.value.show = false;
-};
-
-const postm2 = () => {
-  postMessage(123);
 };
 
 const postMessage = (msg) => {
@@ -82,16 +80,21 @@ const initListener = () => {
     data.value2 = event.data.msg;
   });
 };
+const loadConfig = () => {
+   // todo 解析localdata
+};
 // 显示控制面板
 const configPanel = ref();
 let isPreview = ref(false);
 watchEffect(() => {});
 onMounted(() => {
-  startTimeDo();
+  startDo();
 
   initListener();
 
-  // todo 解析localdata
+ 
+  loadConfig()
+
   if (window.name === "preview") {
     isPreview = true;
     splitState.value = true;
@@ -181,14 +184,14 @@ const doDownload = () => {};
   overflow-y: hidden;
 }
 
-.group-form {
+/* .group-form {
 }
+.group-show {
+} */
 .group-form::-webkit-scrollbar {
   display: none;
 }
-.group-show {
-  /* margin-right: 10px; */
-}
+
 .group-show::-webkit-scrollbar {
   display: none;
 }
