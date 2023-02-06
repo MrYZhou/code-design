@@ -55,19 +55,16 @@ const startDo = () => {
       parse();
     }, 1000 * config.time);
   }
-  if (config.splitPanel) {
-    previewPanel();
-  }
 };
 onUnmounted(() => {
   clearInterval(timer);
-})
+});
 let splitState = ref(false);
 let subWindow = ref(null);
 let rightcom = ref();
 let leftcom = ref();
 const previewPanel = () => {
-  subWindow = window.open('/', "preview", { target: "_blank" });
+  subWindow = window.open("/", "preview", { target: "_blank" });
   splitState.value = true;
   rightcom.value.show = false;
 };
@@ -85,17 +82,23 @@ const initListener = () => {
   });
 };
 
-// 显示控制面板
-const configPanel = ref();
 let isPreview = ref(false);
 const loadConfig = () => {
+  // 读取缓存数据初始化到pinia
   let configData = localStorage.getItem("design-config");
+  let config = JSON.parse(configData);
   if (configData) {
-    store.saveConfig(JSON.parse(configData));
+    store.saveConfig(config);
+  }
+
+  // 只有原始页面才能够打开预览页面
+  if (config.splitPanel && window.name !== "preview") {
+    previewPanel();
   }
 };
 
 watchEffect(() => {});
+
 onMounted(() => {
   startDo();
 
@@ -107,10 +110,13 @@ onMounted(() => {
     isPreview = true;
     splitState.value = true;
     leftcom.value.hide();
+    document.title = "预览视图";
   }
 });
 const axios = inject("axios"); // inject axios
 
+// 显示控制面板
+const configPanel = ref();
 const doConfig = () => {
   configPanel.value.drawer = true;
 };
