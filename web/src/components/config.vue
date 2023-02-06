@@ -23,7 +23,7 @@
               <el-radio label="1" size="large">默认</el-radio>
               <!-- <el-radio label="2" size="large">目录</el-radio> -->
               <!-- <el-radio label="3" size="large">方案</el-radio> -->
-              <el-radio label="4" size="large">只预览</el-radio>
+              <el-radio label="4" :disabled="config.splitPanel" size="large">只预览</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="目录路径" v-if="config.parseType === '2'">
@@ -155,6 +155,9 @@ function cancelClick() {
   drawer.value = false;
 }
 function confirmClick() {
+  if(config.splitPanel && config.parseType == '4'){
+    config.parseType = '1'
+  }
   // 存pinia
   store.saveConfig(config);
   // 存localStorage

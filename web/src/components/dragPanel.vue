@@ -67,7 +67,7 @@ let subWindow = ref(null);
 let rightcom = ref();
 let leftcom = ref();
 const previewPanel = () => {
-  subWindow = window.open(window, "preview", { target: "_blank" });
+  subWindow = window.open('/', "preview", { target: "_blank" });
   splitState.value = true;
   rightcom.value.show = false;
 };
