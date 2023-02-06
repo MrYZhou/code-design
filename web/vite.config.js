@@ -5,7 +5,6 @@ import Components from 'unplugin-vue-components/vite'
 import viteCompression from 'vite-plugin-compression'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import path from 'path'
-console.log(process.env.NODE_ENV);
 export default defineConfig({
   base: process.env.NODE_ENV === 'production'? 'static':'./', 
   publicDir:'static',
