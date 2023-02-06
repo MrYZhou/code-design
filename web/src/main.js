@@ -8,15 +8,12 @@ import { createPinia } from 'pinia'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-import JsonViewer from 'vue-json-viewer'
-
 
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
 app.use(ElementPlus)
-app.use(JsonViewer) 
 app.use(createPinia())
 app.use(VueAxios, {http: axios, axios: axios })
 app.provide('axios', app.config.globalProperties.axios)
