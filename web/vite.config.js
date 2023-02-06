@@ -5,8 +5,10 @@ import Components from 'unplugin-vue-components/vite'
 import viteCompression from 'vite-plugin-compression'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import path from 'path'
+console.log(process.env.NODE_ENV);
 export default defineConfig({
-  base: './', //打包路径
+  base: process.env.NODE_ENV === 'production'? 'static':'./', 
+  publicDir:'static',
   //启动服务配置
   server: {
     host: '127.0.0.1',
@@ -22,6 +24,9 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '') // 重写路径把路径变成空字符
       }
     }
+  },
+  build:{
+    outDir:'../static'
   },
   // ...
   plugins: [
