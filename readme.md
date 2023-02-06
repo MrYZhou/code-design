@@ -1,6 +1,14 @@
-前端
+<div align="center">
+<strong>
+<samp>
+[English](README.md) · [简体中文](README.zh-Hans.md)
+</samp>
+</strong>
+</div>
 
-vue3 + vite 
+front
+
+vue3 + vite + element plus
 
 vue document
 
@@ -10,9 +18,9 @@ vite document
 
 [https://cn.vitejs.dev/guide](https://cn.vitejs.dev/guide/)
 
-后端
+server
 
-fastapi
+base on fastapi
 
 fastapi document
 [https://fastapi.tiangolo.com/zh/tutorial/first-steps/](https://fastapi.tiangolo.com/zh/tutorial/first-steps/)
@@ -33,19 +41,19 @@ docker run -d -p 8000:8000 -p 2666:5173 larryane/codedesign
 
 ### dir desc
 
-resource 存数据库配置等脚本
+resource (Save database configuration and other scripts)
 
-router 路由层
+router (Routing layer)
  
-server 服务实现逻辑
+server (Service implementation logic)
 
-static 静态资源访问目录
+static (Static resource access directory)
 
-template 代码模板
+template (Code template)
 
-util 工具类
+util (Tools)
 
-web 前端项目
+web (Front-end project)
 
 
 ### develop prepare

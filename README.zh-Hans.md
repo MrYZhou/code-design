@@ -1,3 +1,11 @@
+<div align="center">
+<strong>
+<samp>
+[English](README.md) · [简体中文](README.zh-Hans.md)
+</samp>
+</strong>
+</div>
+
 前端
 
 vue3 + vite 
