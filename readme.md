@@ -31,7 +31,15 @@ jinja2 document
 docker run -d -p 8000:8000 -p 2666:5173 larryane/codedesign
 ```
 
+### dir desc
 
+resource 存数据库配置等脚本
+router 路由层
+server 服务实现逻辑
+static 静态资源访问目录
+template 代码模板
+util 工具类
+web 前端项目
 
 ### develop prepare
 
