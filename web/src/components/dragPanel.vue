@@ -87,11 +87,20 @@ const initListener = () => {
 // 显示控制面板
 const configPanel = ref();
 let isPreview = ref(false);
+const loadConfig = () => {
+  let configData = localStorage.getItem("design-config");
+  if (configData) {
+    store.saveConfig(JSON.parse(configData));
+  }
+};
+
 watchEffect(() => {});
 onMounted(() => {
   startDo();
 
   initListener();
+
+  loadConfig();
 
   if (window.name === "preview") {
     isPreview = true;
