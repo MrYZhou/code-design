@@ -14,11 +14,10 @@
     <div class="btn-group" v-if="!isPreview">
       <div><el-button @click="doConfig" :icon="Tools"></el-button></div>
       <template v-if="store.config.parseType != 4">
-        <div><el-button @click="doParse" :icon="View"></el-button></div>
         <!-- <div><el-button @click="doDownload" :icon="Download"></el-button></div> -->
         <div><el-button @click="previewPanel" :icon="DocumentCopy"></el-button></div>
       </template>
-
+      <div><el-button @click="doParse" :icon="View"></el-button></div>
       <div><el-button @click="jsonData" :icon="Dish"></el-button></div>
     </div>
     <div
@@ -125,7 +124,7 @@ const valueChange1 = (data) => {
 };
 
 const doParse = async () => {
-  if (data.value1.length == 0) {
+  if (data.value1.length == 0 && store.config.parseType != 4) {
     ElMessage({
       message: "没有要解析的字符",
       type: "warning",
