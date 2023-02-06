@@ -6,8 +6,7 @@ import viteCompression from 'vite-plugin-compression'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import path from 'path'
 export default defineConfig({
-  base: process.env.NODE_ENV === 'production'? 'static':'./', 
-  publicDir:'static',
+  base: process.env.NODE_ENV === 'production'? 'static/web':'./',
   //启动服务配置
   server: {
     host: '127.0.0.1',
@@ -25,7 +24,7 @@ export default defineConfig({
     }
   },
   build:{
-    outDir:'../static'
+    outDir:'../static/web'
   },
   // ...
   plugins: [

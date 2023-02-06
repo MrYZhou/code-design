@@ -11,7 +11,7 @@ Init.do(app)
 
 @app.get("/")
 async def index():
-    return FileResponse("static/index.html")
+    return FileResponse("static/web/index.html")
 
 
 if __name__ == '__main__':
