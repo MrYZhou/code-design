@@ -1,7 +1,7 @@
 from glob import iglob
 import uvicorn
 from fastapi import FastAPI
-
+from fastapi.responses import FileResponse
 from util.system import Init
 
 app = FastAPI()
@@ -11,7 +11,7 @@ Init.do(app)
 
 @app.get("/")
 async def index():
-    return "index"
+    return FileResponse("static/index.html")
 
 
 if __name__ == '__main__':
