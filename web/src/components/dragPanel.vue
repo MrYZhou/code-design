@@ -59,7 +59,9 @@ const startDo = () => {
     previewPanel();
   }
 };
-
+onUnmounted(() => {
+  clearInterval(timer);
+})
 let splitState = ref(false);
 let subWindow = ref(null);
 let rightcom = ref();
