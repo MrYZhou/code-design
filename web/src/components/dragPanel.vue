@@ -136,8 +136,12 @@ const doParse = async () => {
 
 const parse = async () => {
   let config = store.config;
-  if (data.value1.length == 0) return;
-  let info = { content: data.value1, ...store.config, configData: store.renderData };
+  let info = {
+    content: data.value1,
+    ...store.config,
+    ...store.renderData,
+    ...store.header,
+  };
   let res = await axios.post(`http://127.0.0.1:8000/generate/codeParse`, info);
 
   if (config.datakey) {

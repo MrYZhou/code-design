@@ -1,14 +1,26 @@
 <template>
   <el-drawer v-model="drawer" :direction="direction" size="48%">
     <template #header>
-      <h4>json数据配置</h4>
+      <h4>请求数据配置</h4>
     </template>
     <template #default>
-      <div>
-        <el-row>
-          <json  v-model="textarea1" style="width:100%;height:100vh"></json>
-        </el-row>
-      </div>
+      <el-form :model="postData" label-width="64px" :label-position="'left'">
+        <el-button @click="addKey">添加</el-button>
+        <el-form-item label="header">
+          <el-row v-for="(item) in postData.header" :key="item.key">
+            <el-col :span="10">
+              <el-input v-model="item.key" placeholder="请输入key"></el-input>
+            </el-col>
+            <el-col :span="10">
+              <el-input v-model="item.value" placeholder="请输入值"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <el-button @click="removeKey" :icon="Delete"></el-button>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <json style="width: 100%; height: 100vh" v-model="postData.content"></json>
+      </el-form>
     </template>
     <template #footer>
       <div style="flex: auto">
@@ -19,38 +31,48 @@
   </el-drawer>
 </template>
 
-<script  setup>
-import { ref } from 'vue'
-import { ElMessageBox } from 'element-plus'
+<script setup>
+import { ref } from "vue";
+import { ElMessageBox } from "element-plus";
 import { useMainStore } from "@/store";
-
+import { Delete } from "@element-plus/icons-vue";
 const store = useMainStore();
-let textarea1  = ref('')
-const drawer = ref(false)
-const direction = ref('ltr')
+let textarea1 = ref("");
+let postData = reactive({
+  content: "",
+  header: [{ key: "", value: "" }],
+});
+const addKey = () => {
+  postData.header.push({ key: "", value: "" });
+};
+const removeKey = (index) => {
+  postData.header.splice(index, 1);
+};
+const drawer = ref(false);
+const direction = ref("ltr");
 defineExpose({
   drawer,
 });
 function cancelClick() {
-  drawer.value = false
+  drawer.value = false;
 }
-const emit = defineEmits(['valueRefresh'])
+const emit = defineEmits(["valueRefresh"]);
 function confirmClick() {
-  store.configData(textarea1)
-  emit('valueRefresh','')
-  drawer.value = false
+  store.configData(postData);
+  emit("valueRefresh", "");
+  drawer.value = false;
 }
 </script>
 <style scope>
-  .el-textarea__inner{
-    height: calc(100vh - 150px);
-  }
-  .el-drawer__header{
-    margin-bottom: 0;
-  }
-  .el-drawer__body{
-    overflow: hidden;
-    /* width: 0; */
-    padding-right: 0;
-  }
+.el-textarea__inner {
+  height: calc(100vh - 150px);
+}
+.el-drawer__header {
+  margin-bottom: 0;
+}
+.el-drawer__body {
+  overflow: hidden;
+  /* width: 0; */
+  padding-right: 0;
+}
 </style>

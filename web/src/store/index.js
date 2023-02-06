@@ -7,7 +7,8 @@ export const useMainStore = defineStore({
     name: 'hello larry',
     tableInfo: [],
     config:{},
-    renderData:{}
+    renderData:{},
+    header:{},
   }),
   // 快捷获取
   getters: {
@@ -17,7 +18,12 @@ export const useMainStore = defineStore({
   // 行为
   actions: {
     configData(data){
-      this.renderData = data
+      this.renderData = data.content
+      this.header = data.header.map(item=>{
+        return {
+          [item.key]:item.value
+        }
+      })
     },
     saveConfig(config){
       this.config = config
