@@ -1,6 +1,6 @@
 <template>
   <!-- 抽屉面板 -->
-  <config ref="configPanel" @startDo="startDo"></config>
+  <config ref="configPanel" @startDo="startDo" @previewPanel="previewPanel"></config>
   <jsonDrawer ref="jsondrawer" @valueRefresh="parse"></jsonDrawer>
   <!-- 主布局 -->
   <div class="larry">

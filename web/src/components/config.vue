@@ -150,7 +150,7 @@ const loadConfig = () => {
 onMounted(() => {
   loadConfig();
 });
-const emit = defineEmits(["startDo"]);
+const emit = defineEmits(["startDo","previewPanel"]);
 function cancelClick() {
   drawer.value = false;
 }
@@ -162,6 +162,9 @@ function confirmClick() {
   store.saveConfig(config);
   // 存localStorage
   localStorage.setItem("design-config", JSON.stringify(config));
+  if(config.splitPanel){
+    emit("previewPanel");
+  }
   emit("startDo");
   cancelClick();
 }
