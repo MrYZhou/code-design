@@ -1,10 +1,7 @@
-walrus
 fastapi
 uvicorn[standard]
 jinja2
 aiofiles
 sqlmodel
-nanoid
-pymysql
-python-dotenv
 isort
+pyinstaller
