@@ -125,7 +125,7 @@ settings.json
 
 .vscode/
 .idea/
-static/*
+static/web/*
 
 
 web/node_modules
