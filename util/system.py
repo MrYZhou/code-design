@@ -47,13 +47,13 @@ def initHttp(app: FastAPI):
         allow_headers=["*"],
     )
 
-def initStaticDir(app):
-    app.mount("/static", StaticFiles(directory="static"), name="static")  
+# def initStaticDir(app):
+#     app.mount("/static", StaticFiles(directory="static"), name="static")  
 class Init:
     @staticmethod
     def do(app: FastAPI):
         initHttp(app)
         initRouter(app)
-        initStaticDir(app)
+        # initStaticDir(app)
         
         

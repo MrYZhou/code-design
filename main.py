@@ -1,7 +1,5 @@
-from glob import iglob
 import uvicorn
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
 from util.system import Init
 
 app = FastAPI()

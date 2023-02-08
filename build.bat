@@ -1,5 +1,5 @@
 pyinstaller --onefile --noconfirm  ^
---windowed --clean --name "pyparser" ^
+-w --clean --name "pyparser" ^
 --add-data "./static;static/" ^
 --add-data "./main.py;."  "./main.py"
 

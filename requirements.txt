@@ -4,4 +4,4 @@ jinja2
 aiofiles
 sqlmodel
 isort
-pyinstaller
+pyinstaller==5.6
