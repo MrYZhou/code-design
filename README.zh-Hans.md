@@ -118,5 +118,12 @@ npm run build
 ```
 
 
+### other
+分支说明
+main分支保留,用户发布
+
+dev分支 code-design的开发分支
+
+
 
 
